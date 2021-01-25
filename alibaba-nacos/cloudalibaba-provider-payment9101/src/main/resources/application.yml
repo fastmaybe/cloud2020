@@ -1,0 +1,18 @@
+# 简单注册服务发现
+
+server:
+  port: 9101
+
+spring:
+  application:
+    name: nacos-payment-provider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: '*'
+

@@ -1,0 +1,22 @@
+server:
+  port: 8801
+
+spring:
+  application:
+    name: cloud-stream-provider
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    instance-id: send-8801
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 2 # 设置心跳的间隔时间 默认30s
+    lease-expiration-duration-in-seconds: 5 #如果超过5秒 剔除
+
+
+---
+spring:
+  profiles:
+    active: dy

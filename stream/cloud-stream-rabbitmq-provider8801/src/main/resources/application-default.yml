@@ -1,0 +1,21 @@
+
+# stream 配置
+# https://docs.spring.io/spring-cloud-stream/docs/3.1.0/reference/html/spring-cloud-stream.html#spring-cloud-stream-overview-binders
+spring:
+  cloud:
+    stream:
+      binders: # 在此处配置要绑定的rabbitMq服务信息
+        defaultRabbit:  # 表示定义的名称，用于于binding整合
+          type: rabbit # 消息组件类型
+          environment: # 设置rabbitmq的相关的环境配置
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+      bindings:  # 服务的整合处理
+        output: # 这个名字是一个通道的名字
+          destination: studyExchange # 表示要使用的Exchange名称定义
+          content-type: application/json # 设置消息类型，本次为json，文本则设置“text/plain”
+          binder: defaultRabbit # 设置要绑定的消息服务的具体设置

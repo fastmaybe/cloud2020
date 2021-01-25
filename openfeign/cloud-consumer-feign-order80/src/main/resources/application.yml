@@ -1,0 +1,52 @@
+server:
+  port: 80
+
+spring:
+  application:
+    name: cloud-order-service
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: order-80
+
+
+
+ribbon:
+  ReadTimeout: 3000 # 会被feign 配置的readTimeout 覆盖
+  ConnectTimeout: 3000 # 会被feign 的覆盖
+  OkToRetryOnAllOperations: true # 是否对所有操作重试
+  MaxAutoRetriesNextServer: 1
+  MaxAutoRetries: 0 # 同一实例的重试次数
+  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+
+logging:
+  level:
+    # feign日志以什么级别监控哪个接口 或者某个包（比如某个包下全是feign client）
+    com.fastmay.springcloud.service: debug
+---
+#feign:
+#  client:
+#    config:
+#      default:
+#        #连接到目标的时间，此处会收到注册中心启动中的影响。设置为3秒钟，如果注册中心有明显的不在线，基本是毫秒级熔断拒绝
+#        connectTimeout: 3000
+#        #获取目标连接后执行的最长时间，设置为32秒，即服务最长时
+#        readTimeout: 3000
+
+---
+# ribbon 默认配置 在 com.netflix.client.config.DefaultClientConfigImpl
+#          默认  readTime:5000
+# 1 :然后设置feign readTimeOut 8000   提供者一个里面睡眠 6秒  结果：可以正常调用   【结论】：ribbon 和 feign都配置超时  以feign为准
+# 2 :feign 设置为 3000  在 提供者一个里面睡眠 4秒  结果：出现超时异常              【结论】：ribbon 和 feign都配置超时  以feign为准

@@ -1,0 +1,44 @@
+server:
+  port: 80
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    instance-id: order-hystrix
+    prefer-ip-address: true
+
+
+# ribbon超时设置
+ribbon:
+  ReadTimeout: 5000 # 会被feign 配置的readTimeout 覆盖
+  ConnectTimeout: 5000 # 会被feign 的覆盖
+#  OkToRetryOnAllOperations: true # 是否对所有操作重试 默认false false下只对get重试
+#  MaxAutoRetriesNextServer: 1
+#  MaxAutoRetries: 0 # 同一实例的重试次数
+#  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+
+# 开启 feign 的支持
+feign:
+  hystrix:
+    enabled: true
+
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2000
+    "PaymentHystrixService#paymentInfo_TimeOut(Integer)": #生成规则  源码 feign.Feign.configKey(java.lang.Class, java.lang.reflect.Method)
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+
+
+

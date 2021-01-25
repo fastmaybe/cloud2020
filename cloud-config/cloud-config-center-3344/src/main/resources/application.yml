@@ -1,0 +1,43 @@
+server:
+  port: 3344
+
+spring:
+  application:
+    name: cloud-config-server
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/fastmaybe/cloud-config-2020.git
+          search-paths: cloud-config-2020
+          username: fastmaybe
+          password: it18672793611
+      label: main
+
+
+
+  #spring cloud bus - rabbitmq相关配置
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+# 服务注册
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    instance-id: ${spring.application.name}
+    prefer-ip-address: true
+
+
+
+##rabbitmq相关配置,暴露bus刷新配置的端点
+management:
+  endpoints: #暴露bus刷新配置的端点
+    web:
+      exposure:
+        include: "bus-refresh"

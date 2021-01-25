@@ -1,0 +1,23 @@
+server:
+  port: 7002
+
+
+eureka:
+  instance:
+    hostname: eureka7002.com
+  client:
+    #false标识不向注册中心注册自己 因为自己就是注册中心
+    register-with-eureka: false
+    #自身是注册中心 职责是维护注册信息 不需要检索服务信息
+    fetch-registry: false
+    service-url:
+      #集群指向其它eureka 多个用逗号隔开
+      defaultZone: http://eureka7001.com:7001/eureka/
+      #单机指向自己即可
+#      defaultZone: http://eureka7001.com:7001/eureka/
+
+  server:
+  #关闭自我保护 保证不可用服务被及时剔除  需要配置心跳时间 以及在客户端配置心跳时间
+    enable-self-preservation: false
+#    eureka server清理无效节点的时间间隔，
+    eviction-interval-timer-in-ms: 2000
